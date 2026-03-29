@@ -1,0 +1,15 @@
+.orders-page { padding: 2rem 0 4rem; }
+.orders-list { display: flex; flex-direction: column; gap: 0.85rem; }
+.order-card {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+  background: var(--clr-surface); border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md); padding: 1.25rem 1.5rem;
+  transition: var(--transition);
+}
+.order-card:hover { border-color: var(--clr-primary-lt); box-shadow: var(--shadow-xs); }
+.order-card__left { display: flex; flex-direction: column; gap: 0.2rem; }
+.order-id { font-weight: 700; color: var(--clr-text); }
+.order-date, .order-items { font-size: var(--fs-sm); color: var(--clr-text-muted); }
+.order-card__right { display: flex; align-items: center; gap: 1.25rem; }
+.order-total { font-size: var(--fs-lg); font-weight: 700; color: var(--clr-dark); }
+[data-theme="dark"] .order-total { color: var(--clr-accent); }

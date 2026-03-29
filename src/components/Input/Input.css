@@ -1,0 +1,25 @@
+.taz-field { display: flex; flex-direction: column; gap: 0.35rem; }
+.taz-label { font-size: var(--fs-sm); font-weight: 600; color: var(--clr-text-muted); }
+.taz-input-wrap { position: relative; }
+.taz-input-icon {
+  position: absolute;
+  left: 0.75rem; top: 50%;
+  transform: translateY(-50%);
+  color: var(--clr-text-light);
+  font-size: 1rem;
+  pointer-events: none;
+}
+.taz-input {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  background: var(--clr-surface);
+  border: 1.5px solid var(--clr-border);
+  border-radius: var(--radius-sm);
+  color: var(--clr-text);
+  font-size: var(--fs-base);
+  transition: var(--transition);
+}
+.has-icon .taz-input { padding-left: 2.5rem; }
+.taz-input:focus { border-color: var(--clr-primary); box-shadow: 0 0 0 3px rgba(99,107,47,0.12); }
+.taz-input--error { border-color: var(--clr-error); }
+.taz-field-error { font-size: var(--fs-sm); color: var(--clr-error); }
