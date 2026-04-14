@@ -118,33 +118,35 @@ export default function Landing() {
       {/* ── Banner Carousel (only if banners exist) ── */}
       {banners.length > 0 && (
         <section className="banner-section">
-          <div className="banner-carousel">
-            <div className="banner-track" style={{ transform: `translateX(-${bannerIdx * 100}%)` }}>
-              {banners.map((b) => (
-                <div key={b.id} className="banner-slide">
-                  <img src={getImageUrl(b.image_url)} alt={b.title || 'Banner'} className="banner-img" />
-                  {(b.title || b.subtitle) && (
-                    <div className="banner-overlay">
-                      {b.title    && <h2 className="banner-title">{b.title}</h2>}
-                      {b.subtitle && <p  className="banner-subtitle">{b.subtitle}</p>}
-                      {b.link     && <Link to={b.link} className="taz-btn taz-btn--hero-primary">Shop Now →</Link>}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+          <div className="container">
+            <div className="banner-carousel">
+              <div className="banner-track" style={{ transform: `translateX(-${bannerIdx * 100}%)` }}>
+                {banners.map((b) => (
+                  <div key={b.id} className="banner-slide">
+                    <img src={getImageUrl(b.image_url)} alt={b.title || 'Banner'} className="banner-img" />
+                    {(b.title || b.subtitle) && (
+                      <div className="banner-overlay">
+                        {b.title    && <h2 className="banner-title">{b.title}</h2>}
+                        {b.subtitle && <p  className="banner-subtitle">{b.subtitle}</p>}
+                        {b.link     && <Link to={b.link} className="taz-btn taz-btn--hero-primary">Shop Now →</Link>}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
 
-            {banners.length > 1 && (
-              <>
-                <button className="banner-btn prev" onClick={() => goToBanner((bannerIdx - 1 + banners.length) % banners.length)}>❮</button>
-                <button className="banner-btn next" onClick={() => goToBanner((bannerIdx + 1) % banners.length)}>❯</button>
-                <div className="banner-dots">
-                  {banners.map((_, i) => (
-                    <button key={i} className={`banner-dot${i === bannerIdx ? ' active' : ''}`} onClick={() => goToBanner(i)} />
-                  ))}
-                </div>
-              </>
-            )}
+              {banners.length > 1 && (
+                <>
+                  <button className="banner-btn prev" onClick={() => goToBanner((bannerIdx - 1 + banners.length) % banners.length)}>❮</button>
+                  <button className="banner-btn next" onClick={() => goToBanner((bannerIdx + 1) % banners.length)}>❯</button>
+                  <div className="banner-dots">
+                    {banners.map((_, i) => (
+                      <button key={i} className={`banner-dot${i === bannerIdx ? ' active' : ''}`} onClick={() => goToBanner(i)} />
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </section>
       )}
