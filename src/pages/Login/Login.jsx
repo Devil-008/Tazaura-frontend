@@ -6,6 +6,7 @@ import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button';
 import toast from 'react-hot-toast';
 import { FiUser, FiLock, FiRefreshCw } from 'react-icons/fi';
+import TazauraLogo from '../../assets/SVG 2.svg';
 import '../Auth.css';
 
 export default function Login() {
@@ -47,7 +48,9 @@ export default function Login() {
     <div className="auth-page">
       <div className="auth-card animate-fadeIn">
         <div className="auth-header">
-          <span className="auth-logo">🌿</span>
+          <span className="auth-logo">
+            <img src={TazauraLogo} alt="Tazaura Logo" className="tazaura-svg-logo" style={{ width: '100px', height: 'auto', display: 'block', margin: '0 auto' }} />
+          </span>
           <h1>Welcome Back</h1>
           <p>Sign in to your Tazaura account</p>
         </div>

@@ -1,77 +1,278 @@
+/* =======================================================
+   Auth Pages – Glassmorphism Design (Login & Register)
+   ======================================================= */
+
+/* ── Full-page background with animated gradient ── */
 .auth-page {
   min-height: 100vh;
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, var(--clr-dark) 0%, var(--clr-primary) 100%);
   padding: 2rem;
+  position: relative;
+  overflow: hidden;
+
+  /* Deep gradient base */
+  background:
+    radial-gradient(ellipse 80% 80% at 20% 20%, rgba(99,107,47,.55) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 60% at 80% 80%, rgba(61,65,39,.7)   0%, transparent 60%),
+    linear-gradient(135deg, #1a1e12 0%, #2d3122 50%, #1a1e12 100%);
 }
+
+/* Animated floating blobs behind the card */
+.auth-page::before,
+.auth-page::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  animation: authBlob 10s ease-in-out infinite;
+  z-index: 0;
+}
+.auth-page::before {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(186,192,149,.22), transparent 70%);
+  top: -150px; left: -150px;
+}
+.auth-page::after {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(99,107,47,.3), transparent 70%);
+  bottom: -120px; right: -100px;
+  animation-delay: -5s;
+}
+
+@keyframes authBlob {
+  0%,100% { transform: scale(1) translate(0,0); }
+  33%      { transform: scale(1.1) translate(30px,-20px); }
+  66%      { transform: scale(0.95) translate(-20px,30px); }
+}
+
+/* ── Glassmorphism Card ── */
 .auth-card {
-  background: var(--clr-surface);
-  border-radius: var(--radius-lg);
-  padding: 2.5rem;
+  position: relative;
+  z-index: 1;
   width: 100%;
-  max-width: 460px;
-  box-shadow: var(--shadow-lg);
+  max-width: 480px;
+
+  /* Glass effect */
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.03) 100%);
+  backdrop-filter: blur(30px) saturate(200%);
+  -webkit-backdrop-filter: blur(30px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 24px;
+  padding: 2.75rem 2.5rem;
+
+  /* Premium shadow */
+  box-shadow:
+    0 8px 40px rgba(0,0,0,.45),
+    0 1px 0 rgba(255,255,255,.08) inset,
+    0 -1px 0 rgba(0,0,0,.2) inset;
+
+  animation: cardSlideUp 0.55s cubic-bezier(0.22,1,0.36,1) both;
 }
-.auth-header { text-align: center; margin-bottom: 2rem; }
-.auth-logo { font-size: 3rem; }
-.auth-header h1 { font-size: var(--fs-2xl); font-weight: 800; color: var(--clr-text); margin-top: 0.5rem; }
-.auth-header p  { color: var(--clr-text-muted); margin-top: 0.3rem; }
 
-.auth-form { display: flex; flex-direction: column; gap: 1.1rem; }
+@keyframes cardSlideUp {
+  from { opacity: 0; transform: translateY(32px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)  scale(1); }
+}
 
+/* Subtle shimmer line at top of card */
+.auth-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 20%; right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,222,149,.6), transparent);
+  border-radius: 50%;
+}
+
+/* ── Header ── */
+.auth-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.auth-logo {
+  display: inline-block;
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 4px 16px rgba(212,222,149,.4));
+  animation: logoPulse 3s ease-in-out infinite;
+}
+@keyframes logoPulse {
+  0%,100% { transform: scale(1); }
+  50%      { transform: scale(1.08) rotate(-3deg); }
+}
+.auth-header h1 {
+  font-family: 'Outfit', 'Inter', sans-serif;
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: #fff;
+  margin-top: 0.5rem;
+  letter-spacing: -0.5px;
+}
+.auth-header p {
+  color: rgba(255,255,255,.55);
+  margin-top: 0.4rem;
+  font-size: 0.95rem;
+}
+
+/* ── Form ── */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Override Input component labels and inputs for dark glass context */
+.auth-card .taz-label {
+  color: rgba(255,255,255,.75);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.35rem;
+}
+.auth-card .taz-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-radius: 12px;
+  height: 48px;
+  padding: 0 1rem;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+.auth-card .has-icon .taz-input {
+  padding-left: 2.75rem;
+}
+.auth-card .taz-input::placeholder {
+  color: rgba(255,255,255,.3);
+}
+.auth-card .taz-input:focus {
+  background: rgba(255,255,255,.13);
+  border-color: rgba(212,222,149,.6);
+  box-shadow: 0 0 0 3px rgba(212,222,149,.15);
+  outline: none;
+}
+
+/* ── Captcha Row ── */
 .captcha-row {
   display: flex;
   align-items: stretch;
-  gap: 0.5rem;
-  height: 46px;
+  gap: 0.6rem;
+  height: 48px;
 }
-.captcha-row .taz-field { flex: 1; }
-.captcha-row .taz-input { height: 100%; }
+.captcha-row .taz-field { flex: 1; margin: 0; }
+.captcha-row .taz-input { margin: 0; }
+
 .captcha-box {
-  background: var(--clr-dark);
-  border-radius: var(--radius-sm);
-  min-width: 120px;
+  background: rgba(61,65,39,.75);
+  border: 1.5px solid rgba(212,222,149,.25);
+  border-radius: 12px;
+  min-width: 130px;
   display: flex;
   align-items: center;
   justify-content: center;
   user-select: none;
+  backdrop-filter: blur(8px);
 }
 .captcha-code {
   font-family: 'Courier New', monospace;
-  font-size: 1.4rem;
-  font-weight: 800;
-  letter-spacing: 0.25em;
+  font-size: 1.45rem;
+  font-weight: 900;
+  letter-spacing: 0.3em;
   color: var(--clr-accent);
+  text-shadow: 0 0 12px rgba(212,222,149,.5);
 }
+
 .captcha-load {
-  background: var(--clr-primary);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-sm);
-  padding: 0 0.9rem;
+  background: rgba(99,107,47,.6);
+  backdrop-filter: blur(6px);
+  color: rgba(255,255,255,.9);
+  border: 1.5px solid rgba(212,222,149,.25);
+  border-radius: 12px;
+  padding: 0 1rem;
   font-size: var(--fs-sm);
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
+  transition: background 0.2s;
 }
-.captcha-refresh {
-  background: var(--clr-surface-2);
-  border: 1.5px solid var(--clr-border);
-  border-radius: var(--radius-sm);
-  width: 46px; 
-  display: grid; place-items: center;
-  cursor: pointer;
-  color: var(--clr-text-muted);
-  transition: var(--transition);
-}
-.captcha-refresh:hover { background: var(--clr-border); }
+.captcha-load:hover { background: rgba(99,107,47,.85); }
 
+.captcha-refresh {
+  background: rgba(255,255,255,.07);
+  border: 1.5px solid rgba(255,255,255,.13);
+  border-radius: 12px;
+  width: 48px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: rgba(255,255,255,.55);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.captcha-refresh:hover {
+  background: rgba(255,255,255,.15);
+  color: #fff;
+  transform: rotate(180deg);
+}
+
+/* ── Submit Button override ── */
+.auth-card .taz-btn,
+.auth-card button[type="submit"] {
+  margin-top: 0.35rem;
+}
+
+/* ── Divider ── */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.5rem 0;
+  color: rgba(255,255,255,.3);
+  font-size: 0.8rem;
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,.12);
+}
+
+/* ── Footer link ── */
 .auth-footer {
   text-align: center;
   margin-top: 1.5rem;
-  font-size: var(--fs-sm);
-  color: var(--clr-text-muted);
+  font-size: 0.88rem;
+  color: rgba(255,255,255,.45);
 }
-.auth-footer a { color: var(--clr-primary); font-weight: 600; }
-.auth-footer a:hover { text-decoration: underline; }
+.auth-footer a {
+  color: var(--clr-accent);
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+.auth-footer a:hover {
+  color: #fff;
+  text-shadow: 0 0 12px rgba(212,222,149,.5);
+}
+
+/* ── Responsive ── */
+@media (max-width: 520px) {
+  .auth-card {
+    padding: 2rem 1.5rem;
+    border-radius: 20px;
+  }
+  .auth-header h1 { font-size: 1.6rem; }
+}
+
+/* ── Prevent white gap with footer ── */
+.auth-page {
+  padding-bottom: 5rem; /* Add padding to prevent overlap and cover screen */
+}
+
+/* Find any footer that directly follows the .auth-page (in React Router) */
+.auth-page ~ .footer {
+  margin-top: 0 !important;
+}

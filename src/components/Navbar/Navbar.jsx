@@ -4,6 +4,7 @@ import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
 import { FiSun, FiMoon, FiShoppingCart, FiUser, FiMenu, FiX, FiType, FiChevronLeft } from 'react-icons/fi';
 import { useState, useEffect } from 'react';
+import TazauraLogo from '../../assets/SVG 2.svg';
 import './Navbar.css';
 
 export default function Navbar() {
@@ -39,7 +40,8 @@ export default function Navbar() {
             </button>
           )}
           <Link to="/" className="navbar__logo">
-            🌿 <span>Tazaura</span>
+            <img src={TazauraLogo} alt="Tazaura Logo" className="tazaura-svg-logo" style={{ width: '100px', height: 'auto' }} />
+            {/* <span>Tazaura</span> */}
           </Link>
         </div>
 
