@@ -100,7 +100,7 @@ export default function Checkout() {
         name:  user?.name  || '',
         email: user?.email || '',
       },
-      theme: { color: '#636B2F' },
+      theme: { color: '#F18421' },
       handler: async (response) => {
         try {
           const verRes = await api.post('/payments/verify', response);

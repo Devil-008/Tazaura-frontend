@@ -20,6 +20,6 @@
   transition: var(--transition);
 }
 .has-icon .taz-input { padding-left: 2.5rem; }
-.taz-input:focus { border-color: var(--clr-primary); box-shadow: 0 0 0 3px rgba(99,107,47,0.12); }
+.taz-input:focus { border-color: var(--clr-primary); box-shadow: 0 0 0 3px rgba(115,83,57,0.12); }
 .taz-input--error { border-color: var(--clr-error); }
 .taz-field-error { font-size: var(--fs-sm); color: var(--clr-error); }

@@ -2,22 +2,22 @@
   display: grid;
   grid-template-columns: 240px 1fr;
   gap: 2rem;
-  padding: 2rem 0;
+  padding: 2rem 1.5rem;
   min-height: 80vh;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem 1.5rem;
 }
 .filter-sidebar {
   background: var(--clr-surface);
   border: 1px solid var(--clr-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
   height: fit-content;
   position: sticky;
-  top: 80px;
+  top: 86px;
 }
 .filter-title {
+  font-family: 'Playfair Display', serif;
   font-size: var(--fs-sm);
   font-weight: 700;
   text-transform: uppercase;
@@ -39,8 +39,8 @@
   cursor: pointer;
   transition: var(--transition);
 }
-.filter-chip:hover { border-color: var(--clr-primary-lt); color: var(--clr-primary); }
-.filter-chip.active { background: var(--clr-primary); color: #fff; border-color: var(--clr-primary); }
+.filter-chip:hover { border-color: var(--clr-accent); color: var(--clr-accent); }
+.filter-chip.active { background: var(--clr-accent); color: #fff; border-color: var(--clr-accent); }
 
 .product-list-main {}
 .product-list-header {
@@ -52,9 +52,10 @@
   margin-bottom: 1.5rem;
 }
 .section-title {
+  font-family: 'Playfair Display', serif;
   font-size: var(--fs-2xl);
-  font-weight: 700;
-  color: var(--clr-text);
+  font-weight: 800;
+  color: var(--clr-dark);
   display: flex;
   align-items: baseline;
   gap: 0.75rem;
@@ -65,7 +66,7 @@
   color: var(--clr-text-light);
 }
 .search-input {
-  padding: 0.6rem 1rem;
+  padding: 0.6rem 1rem 0.6rem 1rem;
   border: 1.5px solid var(--clr-border);
   border-radius: var(--radius-full);
   background: var(--clr-surface);
@@ -74,11 +75,11 @@
   width: 240px;
   transition: var(--transition);
 }
-.search-input:focus { border-color: var(--clr-primary); outline: none; }
+.search-input:focus { border-color: var(--clr-accent); outline: none; box-shadow: 0 0 0 3px rgba(241,132,33,0.1); }
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
 }
 .empty-state {
   text-align: center;

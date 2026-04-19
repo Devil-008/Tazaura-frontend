@@ -11,11 +11,11 @@
   position: relative;
   overflow: hidden;
 
-  /* Deep gradient base */
+  /* Deep gradient base – warm brown */
   background:
-    radial-gradient(ellipse 80% 80% at 20% 20%, rgba(99,107,47,.55) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 60% at 80% 80%, rgba(61,65,39,.7)   0%, transparent 60%),
-    linear-gradient(135deg, #1a1e12 0%, #2d3122 50%, #1a1e12 100%);
+    radial-gradient(ellipse 80% 80% at 20% 20%, rgba(115,83,57,.55) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 60% at 80% 80%, rgba(78,53,37,.7)   0%, transparent 60%),
+    linear-gradient(135deg, #1C1710 0%, #3a2a1a 50%, #1C1710 100%);
 }
 
 /* Animated floating blobs behind the card */
@@ -31,12 +31,12 @@
 }
 .auth-page::before {
   width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(186,192,149,.22), transparent 70%);
+  background: radial-gradient(circle, rgba(241,132,33,.22), transparent 70%);
   top: -150px; left: -150px;
 }
 .auth-page::after {
   width: 400px; height: 400px;
-  background: radial-gradient(circle, rgba(99,107,47,.3), transparent 70%);
+  background: radial-gradient(circle, rgba(115,83,57,.3), transparent 70%);
   bottom: -120px; right: -100px;
   animation-delay: -5s;
 }
@@ -82,7 +82,7 @@
   position: absolute;
   top: 0; left: 20%; right: 20%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(212,222,149,.6), transparent);
+  background: linear-gradient(90deg, transparent, rgba(241,132,33,.6), transparent);
   border-radius: 50%;
 }
 
@@ -95,7 +95,7 @@
   display: inline-block;
   font-size: 3rem;
   margin-bottom: 0.5rem;
-  filter: drop-shadow(0 4px 16px rgba(212,222,149,.4));
+  filter: drop-shadow(0 4px 16px rgba(241,132,33,.4));
   animation: logoPulse 3s ease-in-out infinite;
 }
 @keyframes logoPulse {
@@ -103,7 +103,7 @@
   50%      { transform: scale(1.08) rotate(-3deg); }
 }
 .auth-header h1 {
-  font-family: 'Outfit', 'Inter', sans-serif;
+  font-family: 'Playfair Display', serif;
   font-size: 1.9rem;
   font-weight: 800;
   color: #fff;
@@ -149,8 +149,8 @@
 }
 .auth-card .taz-input:focus {
   background: rgba(255,255,255,.13);
-  border-color: rgba(212,222,149,.6);
-  box-shadow: 0 0 0 3px rgba(212,222,149,.15);
+  border-color: rgba(241,132,33,.6);
+  box-shadow: 0 0 0 3px rgba(241,132,33,.15);
   outline: none;
 }
 
@@ -165,8 +165,8 @@
 .captcha-row .taz-input { margin: 0; }
 
 .captcha-box {
-  background: rgba(61,65,39,.75);
-  border: 1.5px solid rgba(212,222,149,.25);
+  background: rgba(78,53,37,.75);
+  border: 1.5px solid rgba(241,132,33,.25);
   border-radius: 12px;
   min-width: 130px;
   display: flex;
@@ -181,14 +181,14 @@
   font-weight: 900;
   letter-spacing: 0.3em;
   color: var(--clr-accent);
-  text-shadow: 0 0 12px rgba(212,222,149,.5);
+  text-shadow: 0 0 12px rgba(241,132,33,.5);
 }
 
 .captcha-load {
-  background: rgba(99,107,47,.6);
+  background: rgba(115,83,57,.6);
   backdrop-filter: blur(6px);
   color: rgba(255,255,255,.9);
-  border: 1.5px solid rgba(212,222,149,.25);
+  border: 1.5px solid rgba(241,132,33,.25);
   border-radius: 12px;
   padding: 0 1rem;
   font-size: var(--fs-sm);
@@ -197,7 +197,7 @@
   white-space: nowrap;
   transition: background 0.2s;
 }
-.captcha-load:hover { background: rgba(99,107,47,.85); }
+.captcha-load:hover { background: rgba(115,83,57,.85); }
 
 .captcha-refresh {
   background: rgba(255,255,255,.07);
@@ -255,7 +255,7 @@
 }
 .auth-footer a:hover {
   color: #fff;
-  text-shadow: 0 0 12px rgba(212,222,149,.5);
+  text-shadow: 0 0 12px rgba(241,132,33,.5);
 }
 
 /* ── Responsive ── */

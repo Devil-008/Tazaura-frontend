@@ -2,18 +2,23 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: var(--clr-surface);
-  border-bottom: 1px solid var(--clr-border);
+  background: rgba(253,246,237,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(115,83,57,0.12);
   transition: var(--transition), box-shadow 0.3s;
 }
 .navbar--scrolled {
   box-shadow: var(--shadow-md);
 }
+[data-theme="dark"] .navbar {
+  background: rgba(28,23,16,0.92);
+  border-bottom-color: rgba(74,58,42,0.5);
+}
 .navbar__inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 64px;
+  height: 70px;
   gap: 1rem;
 }
 .navbar__logo {
@@ -29,24 +34,21 @@
 
 .navbar__links {
   display: flex;
-  gap: 2rem;
+  gap: 4px;
 }
 .navbar__link {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
   font-weight: 500;
   color: var(--clr-text-muted);
-  transition: color 0.2s;
+  transition: all 0.2s;
   position: relative;
 }
-.navbar__link::after {
-  content: '';
-  position: absolute;
-  bottom: -4px; left: 0;
-  width: 0; height: 2px;
-  background: var(--clr-primary);
-  transition: width 0.25s;
+.navbar__link:hover {
+  background: var(--clr-accent-pale);
+  color: var(--clr-accent);
 }
-.navbar__link:hover { color: var(--clr-primary); }
-.navbar__link:hover::after { width: 100%; }
 
 .navbar__actions {
   display: flex;
@@ -66,8 +68,8 @@
   transition: var(--transition);
 }
 .icon-btn:hover {
-  background: var(--clr-surface-2);
-  color: var(--clr-primary);
+  background: var(--clr-accent-pale);
+  color: var(--clr-accent);
 }
 .user-name { font-size: var(--fs-sm); font-weight: 600; color: var(--clr-text); }
 
@@ -75,11 +77,11 @@
 .cart-badge {
   position: absolute;
   top: -5px; right: -5px;
-  background: var(--clr-primary);
+  background: var(--clr-accent);
   color: #fff;
   font-size: 0.65rem;
   font-weight: 700;
-  width: 18px; height: 18px;
+  width: 20px; height: 20px;
   border-radius: 50%;
   display: grid; place-items: center;
 }
@@ -121,7 +123,7 @@
   background: none;
   text-align: left;
 }
-.dropdown-item:hover { background: var(--clr-surface-2); color: var(--clr-primary); }
+.dropdown-item:hover { background: var(--clr-accent-pale); color: var(--clr-accent); }
 .dropdown-item--danger { color: var(--clr-error); }
 .dropdown-item--danger:hover { background: #fef2f2; }
 
@@ -151,8 +153,8 @@
   text-align: left;
   transition: var(--transition);
 }
-.font-option:hover   { background: var(--clr-surface-2); }
-.font-option.active  { background: var(--clr-accent); color: var(--clr-dark); font-weight: 600; }
+.font-option:hover   { background: var(--clr-accent-pale); }
+.font-option.active  { background: var(--clr-accent); color: #fff; font-weight: 600; }
 
 /* Mobile */
 .hamburger { display: none; }
@@ -174,15 +176,30 @@
   font-size: var(--fs-base);
   transition: color 0.2s;
 }
-.mobile-link:hover { color: var(--clr-primary); }
+.mobile-link:hover { color: var(--clr-accent); }
 .mobile-link--danger { color: var(--clr-error); }
 
 /* Buttons */
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
   font-weight: 600; border-radius: var(--radius-sm); transition: var(--transition); cursor: pointer; }
-.btn-primary { background: var(--clr-primary); color: #fff; padding: 0.6rem 1.4rem; }
-.btn-primary:hover { background: var(--clr-dark); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+.btn-primary-nav { background: var(--clr-accent); color: #fff; padding: 0.6rem 1.4rem; border-radius: var(--radius-full); }
+.btn-primary-nav:hover { background: var(--clr-dark); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
 .btn-sm { padding: 0.45rem 1rem; font-size: var(--fs-sm); }
+
+/* Nav login button */
+.btn.btn-primary {
+  background: var(--clr-accent);
+  color: #fff;
+  padding: 0.5rem 1.2rem;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba(241,132,33,0.3);
+}
+.btn.btn-primary:hover {
+  background: var(--clr-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(241,132,33,0.4);
+}
 
 @media (max-width: 768px) {
   .navbar__links { display: none; }

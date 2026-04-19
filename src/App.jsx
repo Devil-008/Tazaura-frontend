@@ -86,7 +86,7 @@ function AppInner() {
             border: '1px solid var(--clr-border)',
             fontFamily: 'Inter, sans-serif',
           },
-          success: { iconTheme: { primary: '#636B2F', secondary: '#fff' } },
+          success: { iconTheme: { primary: '#F18421', secondary: '#fff' } },
         }}
       />
     </BrowserRouter>

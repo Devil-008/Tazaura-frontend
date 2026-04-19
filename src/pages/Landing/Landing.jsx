@@ -6,31 +6,38 @@ import { getImageUrl } from '../../utils/image';
 import './Landing.css';
 
 const CATEGORIES = [
-  { name: 'Nuts',       icon: '🥜', color: '#D4DE95', gradient: 'linear-gradient(135deg,#D4DE95,#BAC095)' },
-  { name: 'Dates',      icon: '🌴', color: '#C8A87A', gradient: 'linear-gradient(135deg,#C8A87A,#A0734E)' },
-  { name: 'Dry Fruits', icon: '🍇', color: '#9B7FD4', gradient: 'linear-gradient(135deg,#9B7FD4,#6B4FA0)' },
-  // { name: 'Oats',       icon: '🌾', color: '#77B89C', gradient: 'linear-gradient(135deg,#77B89C,#3D8065)' },
-  // { name: 'Mixes',      icon: '✨', color: '#E8A87C', gradient: 'linear-gradient(135deg,#E8A87C,#C06B3A)' },
+  { name: 'Nuts',       icon: '🥜', count: '12 Products', bg: '#e8f5e0' },
+  { name: 'Dates',      icon: '🌴', count: '5 Products',  bg: '#fde8d8' },
+  { name: 'Dry Fruits', icon: '🍇', count: '8 Products',  bg: '#f3eafe' },
+  { name: 'Cashews',    icon: '🌰', count: '6 Products',  bg: '#fff8e8' },
+  { name: 'Mixed',      icon: '🎁', count: '7 Products',  bg: '#e8f0fe' },
 ];
 
 const TESTIMONIALS = [
-  { id: 1, name: 'Ayesha Rahman',  role: 'Fitness Enthusiast', text: 'The quality of the dry fruits is simply unmatched. The almonds are crunchy, and the dates are so fresh! Fast delivery too.', rating: 5 },
-  { id: 2, name: 'Rahul Sharma',   role: 'Regular Customer',   text: 'Tazaura has become my go-to for daily oats and mixed nuts. Excellent packaging and premium feel all around. Highly recommended.', rating: 5 },
-  { id: 3, name: 'Priya Desai',    role: 'Home Baker',         text: "I use their walnuts and raisins for my baking business. My clients always ask what my secret is. It's Tazaura's fresh produce!", rating: 4 },
+  { id: 1, name: 'Priya Sharma',   loc: 'Mumbai',     emoji: '👩',   text: 'Tazaura almonds are absolutely fresh and crunchy. I have been ordering for 6 months and the quality never disappoints!', rating: 5 },
+  { id: 2, name: 'Rahul Verma',    loc: 'Delhi',      emoji: '👨',   text: 'Best cashews I have ever tasted. The zipper pack keeps them super fresh. Will definitely reorder.', rating: 5 },
+  { id: 3, name: 'Anjali Patel',   loc: 'Ahmedabad',  emoji: '👩‍💼', text: 'The mixed dry fruits pack is incredible value. Perfect for my family snacking and morning routine.', rating: 5 },
+  { id: 4, name: 'Mohammed Iqbal', loc: 'Hyderabad',  emoji: '👨‍💻', text: 'Dates are soft, sweet and exactly what I needed. Fast delivery and excellent packaging.', rating: 4 },
+  { id: 5, name: 'Sneha Reddy',    loc: 'Bangalore',  emoji: '🧑',   text: 'Love the freshness! The raisins are plump and juicy — definitely not the shriveled ones in stores.', rating: 5 },
+  { id: 6, name: 'Arjun Nair',     loc: 'Chennai',    emoji: '👦',   text: 'Quality is unmatched. Ordered the walnuts and pistachios — both are top class.', rating: 5 },
 ];
 
 const FEATURES = [
-  { icon: '🌿', title: 'All Natural',      desc: 'No preservatives, no additives. Just pure goodness straight from nature.' },
-  { icon: '🚀', title: 'Fast Delivery',    desc: 'Orders shipped within 24 hours, delivered fresh to your doorstep.' },
-  { icon: '💎', title: 'Premium Quality',  desc: 'Hand-selected, grade-A produce from the finest farms worldwide.' },
-  { icon: '🔒', title: 'Secure Payments',  desc: 'UPI, cards, and net banking — all secured via Razorpay.' },
+  { icon: '🌿', title: '100% Natural',      desc: 'No artificial colors, flavors or additives. Just pure nature.' },
+  { icon: '🚫', title: 'No Preservatives',   desc: 'Free from harmful chemicals. Safe for your entire family.' },
+  { icon: '🚚', title: 'Fast Delivery',      desc: 'Express delivery in 24–72 hours. Fresh to your doorstep.' },
+  { icon: '⭐', title: 'Premium Quality',    desc: 'Sourced from certified farms with strict quality checks.' },
+  { icon: '🔒', title: 'Zipper Freshness',   desc: 'Special zipper pouches for extra freshness and resealability.' },
+  
 ];
 
 export default function Landing() {
   const [featured,  setFeatured]  = useState([]);
   const [banners,   setBanners]   = useState([]);
   const [bannerIdx, setBannerIdx] = useState(0);
-  const [testIdx,   setTestIdx]   = useState(0);
+  const [couponCopied, setCouponCopied] = useState(false);
+  const [emailVal, setEmailVal]   = useState('');
+  const [emailMsg, setEmailMsg]   = useState('');
   const bannerTimer = useRef(null);
 
   // Fetch featured products
@@ -56,15 +63,38 @@ export default function Landing() {
     return () => clearInterval(bannerTimer.current);
   }, [banners]);
 
-  // Auto-rotate testimonials
-  useEffect(() => {
-    const t = setInterval(() => setTestIdx((i) => (i + 1) % TESTIMONIALS.length), 5500);
-    return () => clearInterval(t);
-  }, []);
-
   const goToBanner = (idx) => {
     clearInterval(bannerTimer.current);
     setBannerIdx(idx);
+  };
+
+  // Intersection Observer for fade-in
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in:not(.visible)').forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  });
+
+  const copyCoupon = () => {
+    navigator.clipboard?.writeText('DRY20').catch(() => {});
+    setCouponCopied(true);
+    setTimeout(() => setCouponCopied(false), 2000);
+  };
+
+  const subscribeEmail = () => {
+    if (!emailVal.trim() || !emailVal.includes('@')) {
+      setEmailMsg('⚠️ Please enter a valid email.');
+      return;
+    }
+    setEmailMsg('🎉 You\'re subscribed! Check your inbox for a welcome discount.');
+    setEmailVal('');
   };
 
   return (
@@ -72,48 +102,88 @@ export default function Landing() {
 
       {/* ── Hero ── */}
       <section className="hero">
-        <div className="hero__bg-blob hero__bg-blob--1" />
-        <div className="hero__bg-blob hero__bg-blob--2" />
-        <div className="hero__bg-blob hero__bg-blob--3" />
-
-        <div className="hero__content">
-          <span className="hero__badge animate-pop">🌿 Nature's Best</span>
-          <h1 className="hero__title">
-            <span className="hero__title-line animate-slideUp" style={{ '--delay': '0.1s' }}>Premium Dry Fruits</span>
-            <span className="hero__title-line hero__accent animate-slideUp" style={{ '--delay': '0.2s' }}>& Nuts</span>
-          </h1>
-          <p className="hero__desc animate-slideUp" style={{ '--delay': '0.3s' }}>
-            Hand-picked, naturally dried, packed with goodness. Delivered fresh to your doorstep across India.
-          </p>
-          <div className="hero__cta animate-slideUp" style={{ '--delay': '0.4s' }}>
-            <Link to="/products" className="taz-btn taz-btn--hero-primary">
-              Shop Now <span className="btn-arrow">→</span>
-            </Link>
-            <Link to="/products?category=Oats" className="taz-btn taz-btn--hero-ghost">
-              Explore More
-            </Link>
-          </div>
-
-          <div className="hero__stats animate-slideUp" style={{ '--delay': '0.5s' }}>
-            <div className="hero__stat"><strong>20+</strong><span>Products</span></div>
-            <div className="hero__stat-divider" />
-            <div className="hero__stat"><strong>100+</strong><span>Happy Customers</span></div>
-            <div className="hero__stat-divider" />
-            <div className="hero__stat"><strong>24hr</strong><span>Fast Delivery</span></div>
-          </div>
+        <div className="hero__grain" />
+        <div className="hero__circles">
+          <span /><span /><span />
         </div>
-
-        <div className="hero__visual">
-          <div className="hero__circle-ring" />
-          <div className="hero__circle-ring hero__circle-ring--2" />
-          <div className="hero__emoji-wrap">
-            <span className="hero__emoji">🥜</span>
+        <div className="hero__inner">
+          <div className="hero__left">
+            <div className="hero__badge animate-slideUp" style={{ '--delay': '0s' }}>
+              🌿 Premium Dry Fruits Since 2018
+            </div>
+            <h1 className="hero__title animate-slideUp" style={{ '--delay': '0.1s' }}>
+              Nature's <em>Finest</em><br />Dry Fruits,<br />Delivered Fresh
+            </h1>
+            <p className="hero__sub animate-slideUp" style={{ '--delay': '0.2s' }}>
+              100% Natural • No Preservatives • Freshly Packed<br />
+              Sourced from the world's best farms to your doorstep.
+            </p>
+            <div className="hero__ctas animate-slideUp" style={{ '--delay': '0.3s' }}>
+              <Link to="/products" className="btn-primary">Shop Now →</Link>
+              <button className="btn-outline" onClick={() => document.getElementById('categories')?.scrollIntoView({behavior:'smooth'})}>
+                Browse Categories
+              </button>
+            </div>
+            <div className="hero__stats animate-slideUp" style={{ '--delay': '0.4s' }}>
+              <div className="stat-item">
+                <div className="stat-num">50K+</div>
+                <div className="stat-label">Happy Customers</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-num">4.9★</div>
+                <div className="stat-label">Average Rating</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-num">100%</div>
+                <div className="stat-label">Natural & Fresh</div>
+              </div>
+            </div>
           </div>
-          <div className="hero__floating-chip chip--1">🌰 Cashews</div>
-          <div className="hero__floating-chip chip--2">🍇 Raisins</div>
-          <div className="hero__floating-chip chip--3">🌴 Dates</div>
+
+          <div className="hero__visual animate-slideUp" style={{ '--delay': '0.2s' }}>
+            <div className="hero__visual-ring">
+              <span className="hero__emoji">🥜</span>
+            </div>
+            <div className="hero__float-badge b1">
+              <span>250g</span>
+              Premium Pack
+            </div>
+            <div className="hero__float-badge b2">
+              <span>Free</span>
+              Delivery above ₹499
+            </div>
+          </div>
         </div>
       </section>
+
+      {/* ── Coupon ── */}
+      {/* <div className="coupon-section">
+        <div className="coupon-inner">
+          <p className="coupon-text">🎉 Limited Time Offer — <strong>Get 20% OFF</strong> on your first order!</p>
+          <div className="coupon-code">DRY20</div>
+          <button className={`copy-btn${couponCopied ? ' copied' : ''}`} onClick={copyCoupon}>
+            {couponCopied ? '✓ Copied!' : 'Copy Code'}
+          </button>
+        </div>
+      </div> */}
+
+      {/* ── Marquee ── */}
+      <div className="marquee-wrap">
+        <div className="marquee-track">
+          <div className="marquee-item">Premium Almonds</div>
+          <div className="marquee-item">Golden Raisins</div>
+          <div className="marquee-item">Cashew Royale</div>
+          <div className="marquee-item">Medjool Dates</div>
+          <div className="marquee-item">Freshness Guaranteed</div>
+          <div className="marquee-item">Handpicked Quality</div>
+          <div className="marquee-item">Premium Almonds</div>
+          <div className="marquee-item">Golden Raisins</div>
+          <div className="marquee-item">Cashew Royale</div>
+          <div className="marquee-item">Medjool Dates</div>
+          <div className="marquee-item">Freshness Guaranteed</div>
+          <div className="marquee-item">Handpicked Quality</div>
+        </div>
+      </div>
 
       {/* ── Banner Carousel (only if banners exist) ── */}
       {banners.length > 0 && (
@@ -128,7 +198,7 @@ export default function Landing() {
                       <div className="banner-overlay">
                         {b.title    && <h2 className="banner-title">{b.title}</h2>}
                         {b.subtitle && <p  className="banner-subtitle">{b.subtitle}</p>}
-                        {b.link     && <Link to={b.link} className="taz-btn taz-btn--hero-primary">Shop Now →</Link>}
+                        {b.link     && <Link to={b.link} className="btn-primary">Shop Now →</Link>}
                       </div>
                     )}
                   </div>
@@ -151,38 +221,15 @@ export default function Landing() {
         </section>
       )}
 
-      {/* ── Shop by Category ── */}
-      <section className="section section--categories">
-        <div className="container">
-          <div className="section-label">Browse by type</div>
-          <h2 className="section-heading">Shop by <span className="text-accent">Category</span></h2>
-          <div className="categories-grid">
-            {CATEGORIES.map((cat, i) => (
-              <Link
-                key={cat.name}
-                to={`/products?category=${cat.name}`}
-                className="category-card"
-                style={{ '--cat-gradient': cat.gradient, '--cat-color': cat.color, '--delay': `${i * 0.08}s` }}
-              >
-                <div className="category-card__icon-wrap">
-                  <span className="category-icon">{cat.icon}</span>
-                </div>
-                <span className="category-name">{cat.name}</span>
-                <span className="category-arrow">→</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── Featured Products ── */}
       {featured.length > 0 && (
-        <section className="section section--featured">
+        <section className="section section--featured" id="shop">
           <div className="container">
-            <div className="section-header">
+            <div className="section-header-row">
               <div>
-                <div className="section-label">Handpicked for you</div>
-                <h2 className="section-heading">Featured <span className="text-accent">Products</span></h2>
+                <div className="section-tag">Our Products</div>
+                <h2 className="section-heading">Premium <em>Dry Fruits</em> Collection</h2>
+                <p className="section-sub">Handpicked, naturally dried and packed with wholesome goodness.</p>
               </div>
               <Link to="/products" className="view-all-btn">View All <span>→</span></Link>
             </div>
@@ -193,54 +240,91 @@ export default function Landing() {
         </section>
       )}
 
-      {/* ── Why Choose Tazaura ── */}
-      <section className="features-section">
-        <div className="features-section__bg" />
+      {/* ── Shop by Category ── */}
+      <section className="section section--categories" id="categories">
         <div className="container">
-          <div className="section-label light">Our Promise</div>
-          <h2 className="section-heading text-center" style={{ color: 'var(--clr-accent)' }}>
-            Why Choose <span style={{ color: '#fff' }}>Tazaura?</span>
-          </h2>
-          <div className="features-grid">
+          <div className="section-header-center fade-in">
+            <div className="section-tag">Browse By Category</div>
+            <h2 className="section-heading">Shop by <em>Category</em></h2>
+          </div>
+          <div className="categories-grid">
+            {CATEGORIES.map((cat, i) => (
+              <Link
+                key={cat.name}
+                to={`/products?category=${cat.name}`}
+                className="cat-card fade-in"
+                style={{ background: cat.bg, animationDelay: `${i * 0.08}s` }}
+              >
+                <div className="cat-icon">{cat.icon}</div>
+                <div className="cat-name">{cat.name}</div>
+                <div className="cat-count">{cat.count}</div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Why Choose Us ── */}
+      <section className="why-section">
+        <div className="container">
+          <div className="section-header-center fade-in">
+            <div className="section-tag section-tag--light">Why Tazaura</div>
+            <h2 className="section-heading section-heading--white">Why <em>Choose Us</em>?</h2>
+            <p className="section-sub section-sub--light">We take freshness seriously — from farm to your table.</p>
+          </div>
+          <div className="why-grid">
             {FEATURES.map((f, i) => (
-              <div key={f.title} className="feature-card" style={{ '--delay': `${i * 0.1}s` }}>
-                <div className="feature-icon-wrap">
-                  <span className="feature-icon">{f.icon}</span>
-                </div>
-                <h3>{f.title}</h3>
-                <p>{f.desc}</p>
+              <div key={f.title} className="why-card fade-in" style={{ animationDelay: `${i * 0.08}s` }}>
+                <span className="why-icon">{f.icon}</span>
+                <div className="why-title">{f.title}</div>
+                <p className="why-desc">{f.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Testimonials (just above footer) ── */}
+      {/* ── Testimonials ── */}
       <section className="testimonials-section">
         <div className="container">
-          <div className="section-label center">Real Stories</div>
-          <h2 className="section-heading text-center">
-            What Our <span className="text-accent">Customers Say</span>
-          </h2>
-          
+          <div className="section-header-center fade-in">
+            <div className="section-tag">Customer Love</div>
+            <h2 className="section-heading">What Our <em>Customers</em> Say</h2>
+          </div>
           <div className="testimonials-grid">
             {TESTIMONIALS.map((t) => (
-              <div key={t.id} className="testimonial-card animate-slideUp">
-                <div className="card-avatar">{t.name.charAt(0)}</div>
-                <div className="card-content">
-                  <div className="card-rating">{'★'.repeat(t.rating)}{'☆'.repeat(5 - t.rating)}</div>
-                  <p className="card-text">
-                    "{t.text}"
-                  </p>
-                  <span className="card-author">— {t.name}</span>
+              <div key={t.id} className="testi-card fade-in">
+                <div className="testi-quote">"</div>
+                <p className="testi-text">{t.text}</p>
+                <div className="testi-author">
+                  <div className="testi-avatar">{t.emoji}</div>
+                  <div>
+                    <div className="testi-name">{t.name}</div>
+                    <div className="testi-loc">📍 {t.loc}</div>
+                  </div>
+                  <div className="testi-stars">{'★'.repeat(t.rating)}</div>
                 </div>
               </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div className="testimonials-footer text-center" style={{ marginTop: '3rem' }}>
-             <Link to="" className="view-all-btn">Read All Reviews</Link>
+      {/* ── Newsletter ── */}
+      <section className="newsletter-section">
+        <div className="newsletter-inner fade-in">
+          <h2>Get Freshness in Your Inbox 🌿</h2>
+          <p>Subscribe for exclusive deals, new arrivals and healthy lifestyle tips.</p>
+          <div className="newsletter-form">
+            <input
+              type="email"
+              placeholder="Enter your email address"
+              value={emailVal}
+              onChange={(e) => setEmailVal(e.target.value)}
+            />
+            <button onClick={subscribeEmail}>Subscribe</button>
           </div>
+          {emailMsg && <p className="email-msg">{emailMsg}</p>}
         </div>
       </section>
 
