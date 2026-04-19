@@ -1,125 +1,197 @@
-.product-card {
-  background: var(--clr-surface);
-  border: 1px solid var(--clr-border);
-  border-radius: var(--radius-lg);
+.product-card-premium {
+  background: #fff;
+  border-radius: 24px;
   overflow: hidden;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
 }
-.product-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--clr-primary-lt);
-}
-.product-card__img-wrap {
-  position: relative;
-  display: block;
-  aspect-ratio: 1;
-  overflow: hidden;
-  background: var(--clr-bg);
-}
-.product-card__img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-}
-.product-card:hover .product-card__img { transform: scale(1.07); }
 
-.product-card__discount {
+/* Commented out card hover lift */
+/* .product-card-premium:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(115,83,57,0.12);
+} */
+
+/* ── Top Visual Part ── */
+.pc-top {
+  position: relative;
+  height: 320px; /* Increased height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.pc-tag-badges {
   position: absolute;
-  top: 12px; left: 12px;
-  background: var(--clr-accent);
+  top: 16px;
+  left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 2;
+}
+
+.pc-badge {
+  background: var(--clr-accent); /* Orange */
   color: #fff;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 800;
   padding: 4px 12px;
-  border-radius: var(--radius-full);
-  letter-spacing: 0.04em;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
+  box-shadow: 0 2px 8px rgba(241,132,33,0.3);
 }
-.product-card__oos {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  color: #fff;
-  display: grid;
-  place-items: center;
-  font-weight: 700;
-  font-size: var(--fs-sm);
+.pc-badge.new {
+  background: #2a1a0e;
 }
 
-.product-card__body {
-  padding: 18px 20px 20px;
+.pc-img-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 15px; 
+  /* Set normal size to the previous hover size */
+  transform: scale(1.15);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.pc-img-vibe {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Changed back to contain so it doesn't cut */
+  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.12));
+}
+
+/* Commented out image hover scale */
+/* .product-card-premium:hover .pc-img-link {
+  transform: scale(1.15) rotate(2deg);
+} */
+
+.pc-quick-view {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background: rgba(42, 26, 14, 0.8);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+
+/* Commented out quick view hover */
+/* .product-card-premium:hover .pc-quick-view {
+  opacity: 1;
+  transform: translateY(0);
+} */
+
+/* ── Info Part ── */
+.pc-info {
+  padding: 20px;
+  background: #fff;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
-  flex: 1;
-}
-.product-card__category {
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--clr-accent);
-}
-.product-card__name {
-  font-family: 'Playfair Display', serif;
-  font-weight: 700;
-  font-size: 1.05rem;
-  color: var(--clr-dark);
-  line-height: 1.35;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.product-card__name:hover { color: var(--clr-accent); }
-
-.product-card__meta {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-top: 0.15rem;
-}
-.product-card__unit {
-  font-size: var(--fs-sm);
-  color: var(--clr-text-muted);
-}
-.product-card__rating {
-  display: flex;
-  align-items: center;
-  gap: 0.2rem;
-  font-size: var(--fs-sm);
-  color: #f4a100;
-  font-weight: 600;
 }
 
-.product-card__footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: auto;
-  padding-top: 0.75rem;
-}
-.product-card__price { display: flex; align-items: baseline; gap: 0.5rem; }
-.price-current {
+.pc-name {
   font-family: 'Playfair Display', serif;
   font-size: 1.2rem;
-  font-weight: 800;
-  color: var(--clr-accent);
+  font-weight: 700;
+  color: var(--clr-dark);
+  margin-bottom: 4px;
 }
-[data-theme="dark"] .price-current { color: var(--clr-accent); }
-.price-mrp { font-size: var(--fs-sm); color: var(--clr-text-light); text-decoration: line-through; }
 
-.btn-add-cart {
-  background: var(--clr-dark);
-  color: #fff;
-  width: 40px; height: 40px;
-  border-radius: 12px;
-  display: grid;
-  place-items: center;
-  font-size: 1rem;
-  transition: all 0.25s;
+.pc-sub {
+  font-size: 0.85rem;
+  color: #8a6a50;
+  margin-bottom: 10px;
 }
-.btn-add-cart:hover { background: var(--clr-accent); transform: scale(1.08); }
-.btn-add-cart:disabled { background: var(--clr-border); cursor: not-allowed; }
+
+.pc-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+  color: #e2e2e2;
+  font-size: 0.85rem;
+}
+
+.star-filled {
+  color: #F18421; /* Orange stars */
+  fill: #F18421;
+}
+
+.count {
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+.pc-pricing {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.p-curr {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #F18421;
+}
+
+.p-mrp {
+  font-size: 0.9rem;
+  text-decoration: line-through;
+  color: #bbb;
+}
+
+.p-disc {
+  background: #fef3e8;
+  color: #f18421;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.pc-add-btn {
+  background: #4e3525; /* Dark brown */
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: auto;
+}
+
+.pc-add-btn:hover {
+  background: #2a1a0e;
+  transform: scale(1.02);
+}
+
+.pc-add-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}

@@ -1,57 +1,64 @@
 import { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import { getImageUrl } from '../../utils/image';
+import BannerImg from '../../assets/banner.png';
 import './Landing.css';
 
+// Preload banner for top performance
+const bannerPreload = new Image();
+bannerPreload.src = BannerImg;
+
 const CATEGORIES = [
-  { name: 'Nuts',       icon: '🥜', count: '12 Products', bg: '#e8f5e0' },
-  { name: 'Dates',      icon: '🌴', count: '5 Products',  bg: '#fde8d8' },
-  { name: 'Dry Fruits', icon: '🍇', count: '8 Products',  bg: '#f3eafe' },
-  { name: 'Cashews',    icon: '🌰', count: '6 Products',  bg: '#fff8e8' },
-  { name: 'Mixed',      icon: '🎁', count: '7 Products',  bg: '#e8f0fe' },
+  { name: 'Nuts', icon: '🥜', count: '12 Products', bg: '#e8f5e0' },
+  { name: 'Dates', icon: '🌴', count: '5 Products', bg: '#fde8d8' },
+  { name: 'Dry Fruits', icon: '🍇', count: '8 Products', bg: '#f3eafe' },
+  { name: 'Cashews', icon: '🌰', count: '6 Products', bg: '#fff8e8' },
+  { name: 'Mixed', icon: '🎁', count: '7 Products', bg: '#e8f0fe' },
 ];
 
 const TESTIMONIALS = [
-  { id: 1, name: 'Priya Sharma',   loc: 'Mumbai',     emoji: '👩',   text: 'Tazaura almonds are absolutely fresh and crunchy. I have been ordering for 6 months and the quality never disappoints!', rating: 5 },
-  { id: 2, name: 'Rahul Verma',    loc: 'Delhi',      emoji: '👨',   text: 'Best cashews I have ever tasted. The zipper pack keeps them super fresh. Will definitely reorder.', rating: 5 },
-  { id: 3, name: 'Anjali Patel',   loc: 'Ahmedabad',  emoji: '👩‍💼', text: 'The mixed dry fruits pack is incredible value. Perfect for my family snacking and morning routine.', rating: 5 },
-  { id: 4, name: 'Mohammed Iqbal', loc: 'Hyderabad',  emoji: '👨‍💻', text: 'Dates are soft, sweet and exactly what I needed. Fast delivery and excellent packaging.', rating: 4 },
-  { id: 5, name: 'Sneha Reddy',    loc: 'Bangalore',  emoji: '🧑',   text: 'Love the freshness! The raisins are plump and juicy — definitely not the shriveled ones in stores.', rating: 5 },
-  { id: 6, name: 'Arjun Nair',     loc: 'Chennai',    emoji: '👦',   text: 'Quality is unmatched. Ordered the walnuts and pistachios — both are top class.', rating: 5 },
+  { id: 1, name: 'Priya Sharma', loc: 'Mumbai', emoji: '👩', text: 'Tazaura almonds are absolutely fresh and crunchy. I have been ordering for 6 months and the quality never disappoints!', rating: 5 },
+  { id: 2, name: 'Rahul Verma', loc: 'Delhi', emoji: '👨', text: 'Best cashews I have ever tasted. The zipper pack keeps them super fresh. Will definitely reorder.', rating: 5 },
+  { id: 3, name: 'Anjali Patel', loc: 'Ahmedabad', emoji: '👩‍💼', text: 'The mixed dry fruits pack is incredible value. Perfect for my family snacking and morning routine.', rating: 5 },
+  { id: 4, name: 'Mohammed Iqbal', loc: 'Hyderabad', emoji: '👨‍💻', text: 'Dates are soft, sweet and exactly what I needed. Fast delivery and excellent packaging.', rating: 4 },
+  { id: 5, name: 'Sneha Reddy', loc: 'Bangalore', emoji: '🧑', text: 'Love the freshness! The raisins are plump and juicy — definitely not the shriveled ones in stores.', rating: 5 },
+  { id: 6, name: 'Arjun Nair', loc: 'Chennai', emoji: '👦', text: 'Quality is unmatched. Ordered the walnuts and pistachios — both are top class.', rating: 5 },
 ];
 
 const FEATURES = [
-  { icon: '🌿', title: '100% Natural',      desc: 'No artificial colors, flavors or additives. Just pure nature.' },
-  { icon: '🚫', title: 'No Preservatives',   desc: 'Free from harmful chemicals. Safe for your entire family.' },
-  { icon: '🚚', title: 'Fast Delivery',      desc: 'Express delivery in 24–72 hours. Fresh to your doorstep.' },
-  { icon: '⭐', title: 'Premium Quality',    desc: 'Sourced from certified farms with strict quality checks.' },
-  { icon: '🔒', title: 'Zipper Freshness',   desc: 'Special zipper pouches for extra freshness and resealability.' },
-  
+  { icon: '🌿', title: '100% Natural', desc: 'No artificial colors, flavors or additives. Just pure nature.' },
+  { icon: '🚫', title: 'No Preservatives', desc: 'Free from harmful chemicals. Safe for your entire family.' },
+  { icon: '🚚', title: 'Fast Delivery', desc: 'Express delivery in 24–72 hours. Fresh to your doorstep.' },
+  { icon: '⭐', title: 'Premium Quality', desc: 'Sourced from certified farms with strict quality checks.' },
+  { icon: '🔒', title: 'Zipper Freshness', desc: 'Special zipper pouches for extra freshness and resealability.' },
+
 ];
 
 export default function Landing() {
-  const [featured,  setFeatured]  = useState([]);
-  const [banners,   setBanners]   = useState([]);
+  const [featured, setFeatured] = useState([]);
+  const [banners, setBanners] = useState([]);
   const [bannerIdx, setBannerIdx] = useState(0);
   const [couponCopied, setCouponCopied] = useState(false);
-  const [emailVal, setEmailVal]   = useState('');
-  const [emailMsg, setEmailMsg]   = useState('');
+  const [emailVal, setEmailVal] = useState('');
+  const [emailMsg, setEmailMsg] = useState('');
+  const [productSearch, setProductSearch] = useState('');
   const bannerTimer = useRef(null);
+  const navigate = useNavigate();
 
   // Fetch featured products
   useEffect(() => {
     api.get('/products', { params: { per_page: 8 } })
       .then((res) => setFeatured(res.data.data.products.filter((p) => p.is_featured)))
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   // Fetch banners
   useEffect(() => {
     api.get('/banners')
       .then((res) => setBanners(res.data.data || []))
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   // Auto-rotate banners
@@ -83,7 +90,7 @@ export default function Landing() {
   });
 
   const copyCoupon = () => {
-    navigator.clipboard?.writeText('DRY20').catch(() => {});
+    navigator.clipboard?.writeText('DRY20').catch(() => { });
     setCouponCopied(true);
     setTimeout(() => setCouponCopied(false), 2000);
   };
@@ -100,58 +107,11 @@ export default function Landing() {
   return (
     <div className="landing">
 
-      {/* ── Hero ── */}
-      <section className="hero">
-        <div className="hero__grain" />
-        <div className="hero__circles">
-          <span /><span /><span />
-        </div>
-        <div className="hero__inner">
-          <div className="hero__left">
-            <div className="hero__badge animate-slideUp" style={{ '--delay': '0s' }}>
-              🌿 Premium Dry Fruits Since 2018
-            </div>
-            <h1 className="hero__title animate-slideUp" style={{ '--delay': '0.1s' }}>
-              Nature's <em>Finest</em><br />Dry Fruits,<br />Delivered Fresh
-            </h1>
-            <p className="hero__sub animate-slideUp" style={{ '--delay': '0.2s' }}>
-              100% Natural • No Preservatives • Freshly Packed<br />
-              Sourced from the world's best farms to your doorstep.
-            </p>
-            <div className="hero__ctas animate-slideUp" style={{ '--delay': '0.3s' }}>
-              <Link to="/products" className="btn-primary">Shop Now →</Link>
-              <button className="btn-outline" onClick={() => document.getElementById('categories')?.scrollIntoView({behavior:'smooth'})}>
-                Browse Categories
-              </button>
-            </div>
-            <div className="hero__stats animate-slideUp" style={{ '--delay': '0.4s' }}>
-              <div className="stat-item">
-                <div className="stat-num">50K+</div>
-                <div className="stat-label">Happy Customers</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-num">4.9★</div>
-                <div className="stat-label">Average Rating</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-num">100%</div>
-                <div className="stat-label">Natural & Fresh</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="hero__visual animate-slideUp" style={{ '--delay': '0.2s' }}>
-            <div className="hero__visual-ring">
-              <span className="hero__emoji">🥜</span>
-            </div>
-            <div className="hero__float-badge b1">
-              <span>250g</span>
-              Premium Pack
-            </div>
-            <div className="hero__float-badge b2">
-              <span>Free</span>
-              Delivery above ₹499
-            </div>
+      {/* ── Top Banner ── */}
+      <section className="landing-banner-wrap" style={{ cursor: 'pointer' }} id="home" onClick={() => navigate('/products')}>
+        <div className="landing-banner-img-box" >
+          <img src={BannerImg} alt="Tazaura Banner" className="landing-banner-img" />
+          <div className="landing-banner-overlay">
           </div>
         </div>
       </section>
@@ -196,9 +156,9 @@ export default function Landing() {
                     <img src={getImageUrl(b.image_url)} alt={b.title || 'Banner'} className="banner-img" />
                     {(b.title || b.subtitle) && (
                       <div className="banner-overlay">
-                        {b.title    && <h2 className="banner-title">{b.title}</h2>}
-                        {b.subtitle && <p  className="banner-subtitle">{b.subtitle}</p>}
-                        {b.link     && <Link to={b.link} className="btn-primary">Shop Now →</Link>}
+                        {b.title && <h2 className="banner-title">{b.title}</h2>}
+                        {b.subtitle && <p className="banner-subtitle">{b.subtitle}</p>}
+                        {b.link && <Link to={b.link} className="btn-primary">Shop Now →</Link>}
                       </div>
                     )}
                   </div>
@@ -225,16 +185,27 @@ export default function Landing() {
       {featured.length > 0 && (
         <section className="section section--featured" id="shop">
           <div className="container">
-            <div className="section-header-row">
-              <div>
-                <div className="section-tag">Our Products</div>
-                <h2 className="section-heading">Premium <em>Dry Fruits</em> Collection</h2>
-                <p className="section-sub">Handpicked, naturally dried and packed with wholesome goodness.</p>
+            <div className="section-header-center">
+              <div className="section-tag">Our Products</div>
+              <h2 className="section-heading">Premium <em>Dry Fruits</em> Collection</h2>
+              <p className="section-sub">Handpicked, naturally dried and packed with wholesome goodness.</p>
+              <div className="featured-search-bar">
+                <input
+                  type="text"
+                  placeholder="Search almonds, cashews, raisins..."
+                  value={productSearch}
+                  onChange={(e) => setProductSearch(e.target.value)}
+                />
+                <button>Search</button>
               </div>
-              <Link to="/products" className="view-all-btn">View All <span>→</span></Link>
             </div>
             <div className="featured-grid">
-              {featured.map((p) => <ProductCard key={p.id} product={p} />)}
+              {featured
+                .filter((p) => !productSearch || p.name.toLowerCase().includes(productSearch.toLowerCase()))
+                .map((p) => <ProductCard key={p.id} product={p} />)}
+            </div>
+            <div className="featured-viewall">
+              <Link to="/products" className="view-all-btn">View All Products <span>→</span></Link>
             </div>
           </div>
         </section>

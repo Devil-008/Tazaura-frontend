@@ -9,13 +9,13 @@ import './Navbar.css';
 
 export default function Navbar() {
   const { user, logout, isAdmin } = useAuth();
-  const { itemCount, fetchCart }  = useCart();
+  const { itemCount, fetchCart } = useCart();
   const { darkMode, toggleDark, fontSize, changeFontSize } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
-  const [menuOpen, setMenuOpen]     = useState(false);
-  const [scrolled, setScrolled]     = useState(false);
-  const [fontMenu, setFontMenu]     = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [fontMenu, setFontMenu] = useState(false);
 
   useEffect(() => {
     if (user) fetchCart();
@@ -47,7 +47,7 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         <nav className="navbar__links">
-          <Link to="/"         className="navbar__link">Home</Link>
+          <Link to="/" className="navbar__link">Home</Link>
           <Link to="/products" className="navbar__link">Shop</Link>
         </nav>
 
@@ -60,8 +60,8 @@ export default function Navbar() {
             </button>
             {fontMenu && (
               <div className="font-menu">
-                {['sm','md','lg'].map(s => (
-                  <button key={s} className={`font-option${fontSize===s?' active':''}`}
+                {['sm', 'md', 'lg'].map(s => (
+                  <button key={s} className={`font-option${fontSize === s ? ' active' : ''}`}
                     onClick={() => { changeFontSize(s); setFontMenu(false); }}>
                     {s === 'sm' ? 'Small' : s === 'md' ? 'Medium' : 'Large'}
                   </button>
@@ -90,8 +90,8 @@ export default function Navbar() {
                 <FiUser /> <span className="user-name">{user.name?.split(' ')[0]}</span>
               </button>
               <div className="user-dropdown">
-                <Link to="/profile"     className="dropdown-item">Profile</Link>
-                <Link to="/orders"      className="dropdown-item">Orders</Link>
+                <Link to="/profile" className="dropdown-item">Profile</Link>
+                <Link to="/orders" className="dropdown-item">Orders</Link>
                 {isAdmin && <Link to="/admin" className="dropdown-item">Admin</Link>}
                 <button onClick={handleLogout} className="dropdown-item dropdown-item--danger">Logout</button>
               </div>
@@ -110,11 +110,11 @@ export default function Navbar() {
       {/* Mobile menu */}
       {menuOpen && (
         <div className="mobile-menu">
-          <Link to="/"         onClick={() => setMenuOpen(false)} className="mobile-link">Home</Link>
+          <Link to="/" onClick={() => setMenuOpen(false)} className="mobile-link">Home</Link>
           <Link to="/products" onClick={() => setMenuOpen(false)} className="mobile-link">Shop</Link>
-          {user && <Link to="/cart"    onClick={() => setMenuOpen(false)} className="mobile-link">Cart ({itemCount})</Link>}
+          {user && <Link to="/cart" onClick={() => setMenuOpen(false)} className="mobile-link">Cart ({itemCount})</Link>}
           {user && <Link to="/profile" onClick={() => setMenuOpen(false)} className="mobile-link">Profile</Link>}
-          {user && <Link to="/orders"  onClick={() => setMenuOpen(false)} className="mobile-link">Orders</Link>}
+          {user && <Link to="/orders" onClick={() => setMenuOpen(false)} className="mobile-link">Orders</Link>}
           {isAdmin && <Link to="/admin" onClick={() => setMenuOpen(false)} className="mobile-link">Admin</Link>}
           {user
             ? <button onClick={() => { handleLogout(); setMenuOpen(false); }} className="mobile-link mobile-link--danger">Logout</button>

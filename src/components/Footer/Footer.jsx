@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import TazauraLogo from '../../assets/SVG 2.svg';
+import icon2 from '../../assets/icon3.png';
 import './Footer.css';
 
 export default function Footer() {
@@ -8,15 +8,10 @@ export default function Footer() {
       <div className="container footer__grid">
         <div className="footer__brand">
           <span className="footer__logo">
-            <img src={TazauraLogo} alt="Tazaura Logo" className="tazaura-svg-logo" style={{ width: '100px', height: 'auto', display: 'inline-block', verticalAlign: 'middle' }} />
+            <img src={icon2} alt="Tazaura Logo" className="tazaura-svg-logo" style={{ width: '150px', height: 'auto', display: 'inline-block', verticalAlign: 'middle' }} />
           </span>
           <p>Freshness you deserve — premium quality dry fruits sourced directly from the finest farms across the world.</p>
-          {/* <div className="footer__social">
-            <div className="social-btn">📘</div>
-            <div className="social-btn">📸</div>
-            <div className="social-btn">🐦</div>
-            <div className="social-btn">▶️</div>
-          </div> */}
+
         </div>
         <div className="footer__col">
           <h4>Quick Links</h4>
@@ -33,11 +28,12 @@ export default function Footer() {
           <Link to="/profile">Profile</Link>
         </div>
         <div className="footer__col">
-          <h4>Contact Us</h4>
-          <div className="contact-item"><span>📍</span><span>Pukuria, Jhargram, West Bengal, 721514, India</span></div>
-          <div className="contact-item"><span>📞</span><a href="tel:+918327347783">+91 8327347783</a></div>
-          <div className="contact-item"><span>✉️</span><a href="mailto:care@tazaura.in">care@tazaura.in</a></div>
-          <div className="contact-item"><span>⏰</span><span>Mon–Sat: 9AM – 7PM</span></div>
+          <h4>Support</h4>
+          <Link to="/contact">Contact Us</Link>
+          <Link to="/track-order">Track Order</Link>
+          <Link to="/returns">Returns Policy</Link>
+          <Link to="/faq">FAQs</Link>
+          <Link to="/privacy">Privacy Policy</Link>
         </div>
       </div>
       <div className="footer__bottom">

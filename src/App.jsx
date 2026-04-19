@@ -24,6 +24,13 @@ import Orders from './pages/Orders/Orders';
 import OrderDetail from './pages/OrderDetail/OrderDetail';
 import AdminDashboard from './pages/admin/AdminDashboard';
 
+// Support Pages
+import Contact from './pages/Support/Contact';
+import TrackOrder from './pages/Support/TrackOrder';
+import Returns from './pages/Support/Returns';
+import FAQ from './pages/Support/FAQ';
+import Privacy from './pages/Support/Privacy';
+
 // ── Protected route wrapper ─────────────────────────────────────────────
 function ProtectedRoute({ children }) {
   const { user } = useAuth();
@@ -70,6 +77,13 @@ function AppInner() {
 
         {/* Admin */}
         <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+
+        {/* Support */}
+        <Route path="/contact"     element={<Contact />} />
+        <Route path="/track-order" element={<TrackOrder />} />
+        <Route path="/returns"     element={<Returns />} />
+        <Route path="/faq"         element={<FAQ />} />
+        <Route path="/privacy"     element={<Privacy />} />
 
         {/* 404 fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
