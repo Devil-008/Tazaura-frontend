@@ -93,3 +93,7 @@
   .filter-sidebar { position: static; }
   .section-title { font-size: var(--fs-xl); }
 }
+
+@media (max-width: 480px) {
+  .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+}

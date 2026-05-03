@@ -19,12 +19,13 @@ const CATEGORIES = [
 ];
 
 const TESTIMONIALS = [
-  { id: 1, name: 'Priya Sharma', loc: 'Mumbai', emoji: '👩', text: 'Tazaura almonds are absolutely fresh and crunchy. I have been ordering for 6 months and the quality never disappoints!', rating: 5 },
-  { id: 2, name: 'Rahul Verma', loc: 'Delhi', emoji: '👨', text: 'Best cashews I have ever tasted. The zipper pack keeps them super fresh. Will definitely reorder.', rating: 5 },
-  { id: 3, name: 'Anjali Patel', loc: 'Ahmedabad', emoji: '👩‍💼', text: 'The mixed dry fruits pack is incredible value. Perfect for my family snacking and morning routine.', rating: 5 },
-  { id: 4, name: 'Mohammed Iqbal', loc: 'Hyderabad', emoji: '👨‍💻', text: 'Dates are soft, sweet and exactly what I needed. Fast delivery and excellent packaging.', rating: 4 },
-  { id: 5, name: 'Sneha Reddy', loc: 'Bangalore', emoji: '🧑', text: 'Love the freshness! The raisins are plump and juicy — definitely not the shriveled ones in stores.', rating: 5 },
-  { id: 6, name: 'Arjun Nair', loc: 'Chennai', emoji: '👦', text: 'Quality is unmatched. Ordered the walnuts and pistachios — both are top class.', rating: 5 },
+  { id: 1, name: 'Priya Sharma', loc: 'Jhargram', emoji: '👩', text: 'Tazaura almonds are absolutely fresh and crunchy. I have been ordering for 6 months and the quality never disappoints!', rating: 5 },
+  { id: 2, name: 'Rahul Verma', loc: 'Kolkata', emoji: '👨', text: 'Best cashews I have ever tasted. The zipper pack keeps them super fresh. Will definitely reorder.', rating: 5 },
+  { id: 3, name: 'Anjali Patel', loc: 'Kharagpur', emoji: '👩‍💼', text: 'The mixed dry fruits pack is incredible value. Perfect for my family snacking and morning routine.', rating: 5 },
+  // { id: 4, name: 'Mohammed Iqbal', loc: 'Hyderabad', emoji: '👨‍💻', text: 'Dates are soft, sweet and exactly what I needed. Fast delivery and excellent packaging.', rating: 4 },
+  // { id: 5, name: 'Sneha Reddy', loc: 'Bangalore', emoji: '🧑', text: 'Love the freshness! The raisins are plump and juicy — definitely not the shriveled ones in stores.', rating: 5 },
+  // { id: 6, name: 'Arjun Nair', loc: 'Chennai', emoji: '👦', text: 'Quality is unmatched. Ordered the walnuts and pistachios — both are top class.', rating: 5 },
+
 ];
 
 const FEATURES = [
@@ -39,7 +40,8 @@ const FEATURES = [
 export default function Landing() {
   const [featured, setFeatured] = useState([]);
   const [banners, setBanners] = useState([]);
-  const [bannerIdx, setBannerIdx] = useState(0);
+  const [bannerIdx, setBannerIdx] = useState(1);
+  const [isTransitioning, setIsTransitioning] = useState(true);
   const [couponCopied, setCouponCopied] = useState(false);
   const [emailVal, setEmailVal] = useState('');
   const [emailMsg, setEmailMsg] = useState('');
@@ -62,18 +64,65 @@ export default function Landing() {
   }, []);
 
   // Auto-rotate banners
+  const startBannerTimer = () => {
+    clearInterval(bannerTimer.current);
+    if (banners.length > 1) {
+      bannerTimer.current = setInterval(() => {
+        setIsTransitioning(true);
+        setBannerIdx((i) => i + 1);
+      }, 5000);
+    }
+  };
+
   useEffect(() => {
-    if (banners.length < 2) return;
-    bannerTimer.current = setInterval(() => {
-      setBannerIdx((i) => (i + 1) % banners.length);
-    }, 5000);
+    if (banners.length > 1) {
+      setBannerIdx(1);
+      startBannerTimer();
+    } else {
+      setBannerIdx(0);
+    }
     return () => clearInterval(bannerTimer.current);
   }, [banners]);
 
-  const goToBanner = (idx) => {
-    clearInterval(bannerTimer.current);
-    setBannerIdx(idx);
+  const handleTransitionEnd = () => {
+    if (banners.length > 1) {
+      if (bannerIdx === 0) {
+        setIsTransitioning(false);
+        setBannerIdx(banners.length);
+      } else if (bannerIdx === banners.length + 1) {
+        setIsTransitioning(false);
+        setBannerIdx(1);
+      }
+    }
   };
+
+  const goToBanner = (realIndex) => {
+    setIsTransitioning(true);
+    setBannerIdx(realIndex + 1);
+    startBannerTimer();
+  };
+
+  const goNext = (e) => {
+    e.stopPropagation();
+    setIsTransitioning(true);
+    setBannerIdx((i) => i + 1);
+    startBannerTimer();
+  };
+
+  const goPrev = (e) => {
+    e.stopPropagation();
+    setIsTransitioning(true);
+    setBannerIdx((i) => i - 1);
+    startBannerTimer();
+  };
+
+  const extendedBanners = banners.length > 1 
+    ? [banners[banners.length - 1], ...banners, banners[0]] 
+    : banners;
+
+  const realIdx = banners.length > 1 
+    ? (bannerIdx === 0 ? banners.length - 1 : bannerIdx === banners.length + 1 ? 0 : bannerIdx - 1)
+    : 0;
 
   // Intersection Observer for fade-in
   useEffect(() => {
@@ -108,13 +157,51 @@ export default function Landing() {
     <div className="landing">
 
       {/* ── Top Banner ── */}
-      <section className="landing-banner-wrap" style={{ cursor: 'pointer' }} id="home" onClick={() => navigate('/products')}>
-        <div className="landing-banner-img-box" >
-          <img src={BannerImg} alt="Tazaura Banner" className="landing-banner-img" />
-          <div className="landing-banner-overlay">
+      {banners.length > 0 ? (
+        <section className="landing-banner-wrap" id="home">
+          <div className="banner-carousel hero-carousel">
+            <div 
+              className="banner-track" 
+              style={{ 
+                transform: `translateX(-${bannerIdx * 100}%)`,
+                transition: isTransitioning ? 'transform 0.65s cubic-bezier(0.25,1,0.5,1)' : 'none' 
+              }}
+              onTransitionEnd={handleTransitionEnd}
+            >
+              {extendedBanners.map((b, index) => (
+                <div key={`${b.id}-${index}`} className="banner-slide" onClick={() => b.link ? navigate(b.link) : navigate('/products')} style={{ cursor: 'pointer' }}>
+                  <img src={getImageUrl(b.image_url)} alt={b.title || 'Banner'} className="landing-banner-img" />
+                  {(b.title || b.subtitle) && (
+                    <div className="banner-overlay">
+                      {b.title && <h2 className="banner-title">{b.title}</h2>}
+                      {b.subtitle && <p className="banner-subtitle">{b.subtitle}</p>}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {banners.length > 1 && (
+              <>
+                <button className="banner-btn prev" onClick={goPrev}>❮</button>
+                <button className="banner-btn next" onClick={goNext}>❯</button>
+                <div className="banner-dots">
+                  {banners.map((_, i) => (
+                    <button key={i} className={`banner-dot${i === realIdx ? ' active' : ''}`} onClick={(e) => { e.stopPropagation(); goToBanner(i); }} />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
-        </div>
-      </section>
+        </section>
+      ) : (
+        <section className="landing-banner-wrap" style={{ cursor: 'pointer' }} id="home" onClick={() => navigate('/products')}>
+          <div className="landing-banner-img-box" >
+            <img src={BannerImg} alt="Tazaura Banner" className="landing-banner-img" />
+            <div className="landing-banner-overlay"></div>
+          </div>
+        </section>
+      )}
 
       {/* ── Coupon ── */}
       {/* <div className="coupon-section">
@@ -145,41 +232,6 @@ export default function Landing() {
         </div>
       </div>
 
-      {/* ── Banner Carousel (only if banners exist) ── */}
-      {banners.length > 0 && (
-        <section className="banner-section">
-          <div className="container">
-            <div className="banner-carousel">
-              <div className="banner-track" style={{ transform: `translateX(-${bannerIdx * 100}%)` }}>
-                {banners.map((b) => (
-                  <div key={b.id} className="banner-slide">
-                    <img src={getImageUrl(b.image_url)} alt={b.title || 'Banner'} className="banner-img" />
-                    {(b.title || b.subtitle) && (
-                      <div className="banner-overlay">
-                        {b.title && <h2 className="banner-title">{b.title}</h2>}
-                        {b.subtitle && <p className="banner-subtitle">{b.subtitle}</p>}
-                        {b.link && <Link to={b.link} className="btn-primary">Shop Now →</Link>}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {banners.length > 1 && (
-                <>
-                  <button className="banner-btn prev" onClick={() => goToBanner((bannerIdx - 1 + banners.length) % banners.length)}>❮</button>
-                  <button className="banner-btn next" onClick={() => goToBanner((bannerIdx + 1) % banners.length)}>❯</button>
-                  <div className="banner-dots">
-                    {banners.map((_, i) => (
-                      <button key={i} className={`banner-dot${i === bannerIdx ? ' active' : ''}`} onClick={() => goToBanner(i)} />
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* ── Featured Products ── */}
       {featured.length > 0 && (
