@@ -248,9 +248,40 @@ export default function Checkout() {
               <Button variant="primary" size="lg" fullWidth onClick={openRazorpay} style={{ maxWidth:'360px' }}>
                 Pay ₹{subtotal.toFixed(2)} via Razorpay
               </Button>
-              <p className="payment-note">🔒 All payments are secured and encrypted via Razorpay</p>
+              
+              <div style={{ marginTop: '1rem', width: '100%', maxWidth: '360px', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ flex: 1, height: '1px', background: 'var(--clr-border)' }} />
+                <span style={{ fontSize: '0.85rem', color: 'var(--clr-text-muted)' }}>OR</span>
+                <div style={{ flex: 1, height: '1px', background: 'var(--clr-border)' }} />
+              </div>
+
+              <Button 
+                variant="secondary" 
+                size="lg" 
+                fullWidth 
+                loading={loading}
+                disabled={loading}
+                style={{ maxWidth:'360px', marginTop: '1rem', background: '#f5f5f5', color: '#333', border: '1px solid #ddd' }}
+                onClick={async () => {
+                  setLoading(true);
+                  try {
+                    await api.post('/payments/cod', { order_id: orderId });
+                    await clearCart();
+                    toast.success('🎉 Order confirmed with Cash on Delivery!');
+                    navigate(`/orders/${orderId}`);
+                  } catch (err) {
+                    toast.error(err?.response?.data?.message || 'Failed to confirm COD order');
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+              >
+                Cash on Delivery (COD)
+              </Button>
+
+              <p className="payment-note" style={{ marginTop: '1.5rem' }}>🔒 All online payments are secured and encrypted via Razorpay</p>
               <div className="payment-methods">
-                <span>UPI</span><span>Credit Card</span><span>Debit Card</span><span>Net Banking</span>
+                <span>UPI</span><span>Credit Card</span><span>Debit Card</span><span>Net Banking</span><span>COD</span>
               </div>
             </div>
           )}
