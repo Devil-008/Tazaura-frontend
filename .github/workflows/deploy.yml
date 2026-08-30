@@ -7,8 +7,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: aiinhome-aivista/new_agent_2_fe
-  CONTAINER_NAME: new-agent-2-fe
+  IMAGE_NAME: devil-008/tazaura-frontend
+  CONTAINER_NAME: tazaura-frontend
   HOST_PORT: 3014
   CONTAINER_PORT: 80
 
