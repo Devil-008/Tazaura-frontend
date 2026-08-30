@@ -163,7 +163,7 @@ export default function Landing() {
             <div 
               className="banner-track" 
               style={{ 
-                transform: `translateX(-${bannerIdx * 100}%)`,
+                transform: `translateX(-${banners.length > 1 ? bannerIdx * 100 : 0}%)`,
                 transition: isTransitioning ? 'transform 0.65s cubic-bezier(0.25,1,0.5,1)' : 'none' 
               }}
               onTransitionEnd={handleTransitionEnd}
