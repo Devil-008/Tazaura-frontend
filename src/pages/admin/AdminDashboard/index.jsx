@@ -121,6 +121,27 @@ export default function AdminDashboard() {
     setOrders((o) => o.map((x) => x.id === id ? { ...x, status } : x));
   };
 
+  const downloadInvoice = async (orderId) => {
+    try {
+      const res = await api.get(`/admin/orders/${orderId}/invoice`, {
+        responseType: 'blob',
+      });
+      const blob = new Blob([res.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `invoice_${orderId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      toast.success('Invoice downloaded successfully!');
+    } catch (err) {
+      console.error('Error downloading invoice:', err);
+      toast.error('Failed to download invoice');
+    }
+  };
+
   /* ── Banner helpers ── */
   const saveBanner = async (e) => {
     e.preventDefault();
@@ -288,7 +309,7 @@ export default function AdminDashboard() {
           <h2 className="section-heading">All Orders</h2>
           <div className="admin-table-wrap">
             <table className="admin-table">
-              <thead><tr><th>ID</th><th>Customer</th><th>Email</th><th>Total</th><th>Status</th><th>Change Status</th></tr></thead>
+              <thead><tr><th>ID</th><th>Customer</th><th>Email</th><th>Total</th><th>Status</th><th>Change Status</th><th>Invoice</th></tr></thead>
               <tbody>
                 {orders.map((o) => (
                   <tr key={o.id}>
@@ -301,6 +322,11 @@ export default function AdminDashboard() {
                       <select className="status-select" value={o.status} onChange={(e) => updateOrderStatus(o.id, e.target.value)}>
                         {STATUS_OPTIONS.map((s) => <option key={s}>{s}</option>)}
                       </select>
+                    </td>
+                    <td>
+                      <button className="tbl-btn" onClick={() => downloadInvoice(o.id)} style={{ background:'var(--clr-primary)', color:'#fff' }}>
+                        Download
+                      </button>
                     </td>
                   </tr>
                 ))}

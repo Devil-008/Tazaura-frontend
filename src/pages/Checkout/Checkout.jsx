@@ -249,6 +249,7 @@ export default function Checkout() {
                 Pay ₹{subtotal.toFixed(2)} via Razorpay
               </Button>
               
+              {/*
               <div style={{ marginTop: '1rem', width: '100%', maxWidth: '360px', display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <div style={{ flex: 1, height: '1px', background: 'var(--clr-border)' }} />
                 <span style={{ fontSize: '0.85rem', color: 'var(--clr-text-muted)' }}>OR</span>
@@ -278,10 +279,11 @@ export default function Checkout() {
               >
                 Cash on Delivery (COD)
               </Button>
+              */}
 
               <p className="payment-note" style={{ marginTop: '1.5rem' }}>🔒 All online payments are secured and encrypted via Razorpay</p>
               <div className="payment-methods">
-                <span>UPI</span><span>Credit Card</span><span>Debit Card</span><span>Net Banking</span><span>COD</span>
+                <span>UPI</span><span>Credit Card</span><span>Debit Card</span><span>Net Banking</span>{/*<span>COD</span>*/}
               </div>
             </div>
           )}

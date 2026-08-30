@@ -37,12 +37,12 @@ export default function OrderDetail() {
       {order.payment && (
         <div style={{ background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', borderRadius: 'var(--radius-md)', padding: '1.25rem 1.5rem' }}>
           <h3 style={{ marginBottom: '0.5rem' }}>Payment Info</h3>
-          {order.payment.method === 'COD' ? (
+          {/* order.payment.method === 'COD' ? (
             <>
               <p style={{ color: 'var(--clr-text)', fontWeight: 600, fontSize: 'var(--fs-base)' }}>Cash on Delivery (COD)</p>
               <p style={{ color: 'var(--clr-text-muted)', fontSize: 'var(--fs-sm)', marginTop: '0.25rem' }}>Payment will be collected upon delivery. (Status: {order.payment.status})</p>
             </>
-          ) : (
+          ) : */ (
             <>
               <p style={{ color: 'var(--clr-text-muted)', fontSize: 'var(--fs-sm)' }}>Method: {order.payment.method} | Status: {order.payment.status}</p>
               {order.payment.razorpay_payment_id && (
