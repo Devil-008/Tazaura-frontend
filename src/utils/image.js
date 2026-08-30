@@ -1,5 +1,5 @@
 const BASE_URL =
-  import.meta.env.VITE_API_URL || 'https://tazaura.in/api/api/v1';
+  import.meta.env.VITE_API_URL || 'https://tazaura.in/api/v1';
 
 export function getImageUrl(path) {
   if (!path) return '/placeholder.jpg';
