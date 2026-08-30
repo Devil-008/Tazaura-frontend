@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'https://tazaura.in/api/v1',
-  timeout: 15000,
+  timeout: 60000,
 });
 
 // ── Request: attach JWT + trigger global loader ─────────────────────────
